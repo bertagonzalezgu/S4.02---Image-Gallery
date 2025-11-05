@@ -463,8 +463,6 @@ git checkout main
 git merge feature/event-handlers
 ```
 
----
-
 ### Iteración 4: Drag and Drop
 
 **Conceptos clave:**
@@ -496,8 +494,6 @@ git checkout -b feature/drag-and-drop
 
 **💡 Decisión:** Te recomendamos empezar con la opción A para entender los fundamentos, y luego migrar a dnd-kit si encuentras limitaciones.
 
----
-
 **3. Implementación con HTML5 API (Opción A)**
 
 **Pasos básicos:**
@@ -516,8 +512,6 @@ git checkout -b feature/drag-and-drop
 
 **Recurso:** [Using the HTML5 Drag and Drop API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API)
 
----
-
 **4. Implementación con dnd-kit (Opción B)**
 
 **Instalación:**
@@ -530,38 +524,9 @@ npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities
 - `<SortableContext>` - Define el contenedor sortable
 - `useSortable()` - Hook para elementos arrastrables
 
-**Ejemplo básico:**
-```tsx
-import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable';
-
-function Gallery() {
-  const handleDragEnd = (event) => {
-    const {active, over} = event;
-    if (active.id !== over.id) {
-      setImages((items) => {
-        const oldIndex = items.findIndex(i => i.id === active.id);
-        const newIndex = items.findIndex(i => i.id === over.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
-  };
-
-  return (
-    <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-      <SortableContext items={images}>
-        {/* Render images */}
-      </SortableContext>
-    </DndContext>
-  );
-}
-```
-
 **Recursos:**
 - [dnd-kit Quick Start](https://docs.dndkit.com/introduction/getting-started)
 - [Sortable Preset](https://docs.dndkit.com/presets/sortable)
-
----
 
 **5. Maneja el estado después del reordenamiento**
 
@@ -575,8 +540,6 @@ function Gallery() {
 
 **💡 Solución:** La primera posición del array siempre determina la imagen destacada, no necesitas estado adicional.
 
----
-
 **6. Estiliza el drag-and-drop**
 
 **UX considerations:**
@@ -585,23 +548,7 @@ function Gallery() {
 - Cursor apropiado
 - Animaciones suaves
 
-**Con dnd-kit:**
-```tsx
-import { CSS } from '@dnd-kit/utilities';
-
-const { attributes, listeners, setNodeRef, transform, transition } = useSortable({
-  id: image.id
-});
-
-const style = {
-  transform: CSS.Transform.toString(transform),
-  transition,
-};
-```
-
 **Investiga:** Cómo personalizar las animaciones con Tailwind
-
----
 
 **7. Merge**
 
@@ -649,23 +596,6 @@ Antes de codificar, piensa:
 - Previene duplicados automáticamente
 - `.has()`, `.add()`, `.delete()` son semánticos
 
-**Ejemplo de implementación:**
-```typescript
-const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-
-const toggleSelection = (id: string) => {
-  setSelectedIds(prev => {
-    const newSet = new Set(prev);
-    if (newSet.has(id)) {
-      newSet.delete(id);
-    } else {
-      newSet.add(id);
-    }
-    return newSet;
-  });
-};
-```
-
 **❓ Desafío:**
 - ¿Por qué necesitas crear un nuevo Set y no modificar el anterior?
 
@@ -701,18 +631,6 @@ interface ImageItemProps {
 - Confirmación clara antes de eliminar
 - Feedback después de eliminar
 
-**Ejemplo de renderizado condicional:**
-```tsx
-{selectedIds.size > 0 && (
-  <Button 
-    variant="destructive"
-    onClick={handleDeleteSelected}
-  >
-    Eliminar {selectedIds.size} imágenes
-  </Button>
-)}
-```
-
 **💡 Ejemplo mensaje:** "¿Eliminar 3 imágenes seleccionadas?"
 
 **6. Implementa la lógica de eliminación batch**
@@ -721,17 +639,6 @@ interface ImageItemProps {
 - Eliminar todas las seleccionadas en una operación
 - Limpiar el estado de selección después
 - Mantener inmutabilidad
-
-```typescript
-const handleDeleteSelected = () => {
-  if (selectedIds.size === 0) return;
-  
-  if (window.confirm(`¿Eliminar ${selectedIds.size} imágenes?`)) {
-    setImages(prev => prev.filter(img => !selectedIds.has(img.id)));
-    setSelectedIds(new Set());
-  }
-};
-```
 
 **❓ Desafío de rendimiento:**
 - ¿Es eficiente este enfoque para 100+ imágenes?
@@ -802,11 +709,9 @@ import '@testing-library/jest-dom';
 }
 ```
 
-**📖 Recursos:**
+**Recursos:**
 - [Vitest Documentation](https://vitest.dev/)
 - [React Testing Library](https://testing-library.com/react)
-
----
 
 **3. Testing de ImageItem Component**
 
@@ -815,192 +720,74 @@ import '@testing-library/jest-dom';
 **Tests esenciales:**
 
 **a) Renderizado:**
-```typescript
-import { render, screen } from '@testing-library/react';
-import { ImageItem } from './ImageItem';
-
-describe('ImageItem', () => {
-  const mockImage = {
-    id: '1',
-    src: 'https://picsum.photos/id/1/200/300',
-    alt: 'Test image'
-  };
-
-  it('should render image with correct src and alt', () => {
-    render(
-      <ImageItem 
-        image={mockImage} 
-        onDelete={vi.fn()} 
-        onToggleSelect={vi.fn()} 
-      />
-    );
-    
-    const img = screen.getByRole('img');
-    expect(img).toHaveAttribute('src', mockImage.src);
-    expect(img).toHaveAttribute('alt', mockImage.alt);
-  });
-
-  it('should apply featured class when isFeatured is true', () => {
-    render(
-      <ImageItem 
-        image={mockImage} 
-        isFeatured={true}
-        onDelete={vi.fn()} 
-        onToggleSelect={vi.fn()} 
-      />
-    );
-    
-    // Busca el elemento con data-testid o la clase específica
-    const container = screen.getByTestId('image-item');
-    expect(container).toHaveClass('featured');
-  });
-});
-```
+- Se crea correctamente
+- Muestra la imagen con src/alt correctos
+- Aplica clase `featured` cuando corresponde
+- Aplica clase de selección cuando corresponde
 
 **b) Interactividad:**
-```typescript
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+- Emite evento de eliminación al hacer click
+- Emite evento de selección al hacer click
+- `stopPropagation` se llama correctamente
 
-it('should call onDelete when delete button is clicked', async () => {
-  const mockOnDelete = vi.fn();
-  const user = userEvent.setup();
+**c) Edge cases:**
+- Comportamiento con datos inválidos
+- Múltiples clicks rápidos
+
+**Pattern:** Arrange-Act-Assert
+
+```typescript
+it('should do something', () => {
+  // Arrange: prepara el escenario
+  const testData = {...};
   
-  render(
-    <ImageItem 
-      image={mockImage} 
-      onDelete={mockOnDelete}
-      onToggleSelect={vi.fn()} 
-    />
-  );
+  // Act: ejecuta la acción
+  component.doSomething(testData);
   
-  const deleteButton = screen.getByRole('button', { name: /delete/i });
-  await user.click(deleteButton);
-  
-  expect(mockOnDelete).toHaveBeenCalledWith(mockImage.id);
-  expect(mockOnDelete).toHaveBeenCalledTimes(1);
+  // Assert: verifica el resultado
+  expect(component.result).toBe(expected);
 });
 ```
 
 **Recurso:** [Common mistakes with React Testing Library](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
 
----
-
 **4. Testing de Gallery Component**
-
-**Crea `src/components/Gallery.test.tsx`:**
 
 **Tests esenciales:**
 
-**a) Renderizado inicial:**
-```typescript
-describe('Gallery', () => {
-  it('should render all images', () => {
-    render(<Gallery />);
-    
-    const images = screen.getAllByRole('img');
-    expect(images).toHaveLength(6); // o el número de imágenes iniciales
-  });
-
-  it('should mark first image as featured', () => {
-    render(<Gallery />);
-    
-    const featuredImage = screen.getByTestId('image-item-featured');
-    expect(featuredImage).toBeInTheDocument();
-  });
-});
-```
+**a) Renderizado:**
+- Renderiza el número correcto de ImageItems
+- Pasa los inputs correctamente a los hijos
+- Marca la primera imagen como destacada
 
 **b) Eliminación:**
-```typescript
-it('should remove image when delete is confirmed', async () => {
-  const user = userEvent.setup();
-  
-  // Mock window.confirm
-  window.confirm = vi.fn(() => true);
-  
-  render(<Gallery />);
-  
-  const initialImages = screen.getAllByRole('img');
-  const initialCount = initialImages.length;
-  
-  const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-  await user.click(deleteButtons[0]);
-  
-  const remainingImages = screen.getAllByRole('img');
-  expect(remainingImages).toHaveLength(initialCount - 1);
-});
+- Individual funciona
+- Múltiple funciona
+- Pide confirmación
+- Actualiza el UI correctamente
 
-it('should not remove image when delete is cancelled', async () => {
-  const user = userEvent.setup();
-  window.confirm = vi.fn(() => false);
-  
-  render(<Gallery />);
-  
-  const initialImages = screen.getAllByRole('img');
-  const initialCount = initialImages.length;
-  
-  const deleteButtons = screen.getAllByRole('button', { name: /delete/i });
-  await user.click(deleteButtons[0]);
-  
-  const remainingImages = screen.getAllByRole('img');
-  expect(remainingImages).toHaveLength(initialCount);
-});
-```
+**c) Drag and Drop:**
+- Reordena correctamente el array
+- Actualiza la imagen destacada si necesario
 
-**c) Selección múltiple:**
-```typescript
-it('should allow multiple selection', async () => {
-  const user = userEvent.setup();
-  
-  render(<Gallery />);
-  
-  const images = screen.getAllByRole('img');
-  
-  // Selecciona las primeras 3 imágenes
-  await user.click(images[0]);
-  await user.click(images[1]);
-  await user.click(images[2]);
-  
-  // Verifica que el botón de eliminación múltiple aparece
-  const deleteButton = screen.getByText(/eliminar 3/i);
-  expect(deleteButton).toBeInTheDocument();
-});
-```
-
----
+**d) Selección:**
+- Toggle funciona
+- Eliminar seleccionadas funciona
+- Estado se limpia después de eliminar
 
 **5. Tests de integración**
 
-**Objetivo:** Testear flujos completos de usuario
+**Objetivo:** Testear la aplicación completa
 
 **Escenarios:**
-```typescript
-it('should handle complete user flow', async () => {
-  const user = userEvent.setup();
-  window.confirm = vi.fn(() => true);
-  
-  render(<Gallery />);
-  
-  // 1. Usuario ve la galería
-  expect(screen.getAllByRole('img')).toHaveLength(6);
-  
-  // 2. Usuario selecciona 2 imágenes
-  const images = screen.getAllByRole('img');
-  await user.click(images[0]);
-  await user.click(images[1]);
-  
-  // 3. Usuario elimina seleccionadas
-  const deleteButton = screen.getByText(/eliminar 2/i);
-  await user.click(deleteButton);
-  
-  // 4. Verifica resultado
-  expect(screen.getAllByRole('img')).toHaveLength(4);
-  expect(screen.queryByText(/eliminar/i)).not.toBeInTheDocument();
-});
-```
+1. Usuario carga la app → ve la galería
+2. Usuario elimina una imagen → desaparece
+3. Usuario reordena → orden cambia
+4. Usuario selecciona múltiples → puede eliminarlas
 
----
+**❓ Diferencia:**
+- Tests unitarios: un componente aislado
+- Tests de integración: múltiples componentes juntos
 
 **6. Analiza la cobertura**
 
@@ -1043,8 +830,6 @@ Si un test es difícil de escribir, probablemente el código está mal diseñado
 **💡 Filosofía de Testing Library:**
 "The more your tests resemble the way your software is used, the more confidence they can give you."
 
----
-
 **8. Merge**
 
 ```bash
@@ -1053,8 +838,6 @@ git commit -m "feat: add comprehensive test suite"
 git checkout main
 git merge feature/testing
 ```
-
----
 
 ## 🎓 Criterios de Evaluación
 
@@ -1085,8 +868,6 @@ git merge feature/testing
 - [ ] Ramas por feature
 - [ ] README completo
 - [ ] Sin archivos innecesarios en el repo
-
----
 
 ## Recursos Generales
 
@@ -1141,8 +922,6 @@ git merge feature/testing
 - Generar casos de test adicionales
 - Entender mensajes de error complejos
 
----
-
 ## Checklist Final del Proyecto
 
 Antes de considerar el proyecto terminado:
@@ -1176,8 +955,6 @@ Antes de considerar el proyecto terminado:
 - [ ] Sin re-renders innecesarios
 - [ ] Bundle size razonable
 - [ ] Lighthouse Performance >90
-
----
 
 **¡Éxito en tu aprendizaje!**
 
