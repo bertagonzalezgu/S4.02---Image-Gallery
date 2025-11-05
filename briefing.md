@@ -226,8 +226,6 @@ git push origin main
 
 **Recurso:** [Git Merge vs Rebase](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
 
----
-
 ### Iteración 2: Estilización Profesional
 
 **Conceptos clave:**
@@ -347,8 +345,6 @@ git commit -m "feat: add accessibility improvements"
 git checkout main
 git merge feature/styles
 ```
-
----
 
 ### Iteración 3: Interactividad - Eventos y Estado
 
@@ -558,8 +554,6 @@ git commit -m "feat: implement drag-and-drop reordering"
 git checkout main
 git merge feature/drag-and-drop
 ```
-
----
 
 ### Iteración 5: Selección Múltiple
 
@@ -813,8 +807,6 @@ npm run test:coverage
 
 **Recurso:** [Testing Best Practices](https://kentcdodds.com/blog/common-mistakes-with-react-testing-library)
 
----
-
 **7. Refactoriza basándose en los tests**
 
 **Concepto:** Tests como documentación
@@ -889,8 +881,6 @@ git merge feature/testing
 ### Clean Code
 - [Clean Code JavaScript](https://github.com/ryanmcdermott/clean-code-javascript)
 - [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
-
----
 
 ## 💡 Consejos Finales
 
