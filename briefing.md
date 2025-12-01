@@ -394,7 +394,6 @@ interface ImageItemProps {
 **3. Gestiona la eliminación en Gallery**
 
 **Requisitos:**
-- Confirmar antes de eliminar (`window.confirm`)
 - Actualizar el estado de forma inmutable
 - Manejar el caso de eliminar la imagen destacada
 
