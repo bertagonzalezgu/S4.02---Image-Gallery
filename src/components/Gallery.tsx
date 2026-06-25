@@ -2,7 +2,8 @@ import ImageItem from "./ImageItem";
 
 const images = [{
     id: 1,
-    src: "../assets/img/img_1.webp"
+    src: "../assets/img/img_1.webp",
+    isFeatured: true
 }, {
     id: 2,
     src: "../assets/img/img_2.webp"
@@ -22,7 +23,7 @@ const images = [{
 
 export default function Gallery(){
     const listItems = images.map(image =>
-    <ImageItem key={image.id} id={image.id} src={image.src}/>
+    <ImageItem key={image.id} id={image.id} src={image.src} isFeatured={true}/>
     );
     return <ul>{listItems}</ul>
 };
