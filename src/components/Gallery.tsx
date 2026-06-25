@@ -1,29 +1,34 @@
 import ImageItem from "./ImageItem";
+import img1 from "../assets/img/img_1.webp";
+import img2 from "../assets/img/img_2.webp";
+import img3 from "../assets/img/img_3.webp";
+import img4 from "../assets/img/img_4.webp";
+import img5 from "../assets/img/img_5.webp";
+import img6 from "../assets/img/img_6.webp";
 
 const images = [{
     id: 1,
-    src: "../assets/img/img_1.webp",
+    src: img1,
     isFeatured: true
 }, {
     id: 2,
-    src: "../assets/img/img_2.webp"
+    src: img2
 }, {
     id: 3,
-    src: "../assets/img/img_3.webp"
+    src: img3
 }, {
     id: 4,
-    src: "../assets/img/img_4.webp"
+    src: img4
 }, {
     id: 5,
-    src: "../assets/img/img_5.webp"
+    src: img5
 }, {
     id: 6,
-    src: "../assets/img/img_6.webp"
+    src: img6
 }];
 
 export default function Gallery(){
-    const listItems = images.map(image =>
-    <ImageItem key={image.id} id={image.id} src={image.src} isFeatured={true}/>
-    );
-    return <ul>{listItems}</ul>
+    const listItems = images.map((image, index) =>
+    <ImageItem key={image.id} id={image.id} src={image.src} isFeatured={index === 0}/>)
+    return <ul>{listItems}</ul>  
 };

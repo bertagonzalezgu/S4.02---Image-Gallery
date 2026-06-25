@@ -1,0 +1,27 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+
+ul{
+    width: 100%;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+ul li{
+    list-style: none;
+}
+
+ul li img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.featured{
+    grid-column: span 2;
+    grid-row: span 2;
+}
