@@ -1,4 +1,6 @@
-export const images = [{
+import ImageItem from "./ImageItem";
+
+const images = [{
     id: 1,
     src: "../assets/img/img_1.webp"
 }, {
@@ -18,9 +20,9 @@ export const images = [{
     src: "../assets/img/img_6.webp"
 }];
 
-/* const listItems = images.map(image =>
-    <li key={image.id}>
-        <img src={image.src} alt="" />
-    </li>
+export default function Gallery(){
+    const listItems = images.map(image =>
+    <ImageItem key={image.id} id={image.id} src={image.src}/>
     );
-    return <ul>{listItems}</ul> */
+    return <ul>{listItems}</ul>
+};
