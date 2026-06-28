@@ -8,7 +8,13 @@ export default function Gallery(){
     <ImageItem key={image.id} id={image.id} src={image.src} isFeatured={index === 0} onDelete={handleClick}/>)
 
     function handleClick(id: number){
-    setTotalImages(totalImages.filter((image) => image.id !== id));
+
+    const confirm = window.confirm('Are you sure you want to delete the image?')
+
+        if(confirm === true){
+                setTotalImages(totalImages.filter((image) => image.id !== id));
+        }
+
     }
 
     return  <main className="list-none bg-yellow-100 px-5 py-5 flex justify-center">
