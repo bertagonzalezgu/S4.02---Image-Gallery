@@ -1,15 +1,18 @@
+import { useSortable } from "@dnd-kit/react/sortable";
 import closeIcon from "../assets/icons/close-svgrepo-com.svg"
 
 type ImageProps = {
   id: number;       
   src: string;
   isFeatured: boolean;
-  onDelete: (id: number) => void
+  onDelete: (id: number) => void;
+  index: number
 };
 
-export default function ImageItem({id, src, isFeatured, onDelete}: ImageProps){
+export default function ImageItem({id, src, isFeatured, onDelete, index}: ImageProps){
+    const {ref} = useSortable({id, index});
     return(
-        <li key={id} className={`relative ${isFeatured? "lg:col-span-2 lg:row-span-2": ""}`}>
+        <li ref={ref} key={id} className={`relative ${isFeatured? "lg:col-span-2 lg:row-span-2": ""}`}>
             <img src={src} className="w-full h-full object-cover" alt="" />
             <button className="absolute top-2 right-2" 
                 onClick={(e) => 
