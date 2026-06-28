@@ -13,7 +13,8 @@ export default function ImageItem({id, src, isFeatured, onDelete, index}: ImageP
     const {ref} = useSortable({id, index});
     return(
         <li ref={ref} key={id} className={`relative ${isFeatured? "lg:col-span-2 lg:row-span-2": ""}`}>
-            <img src={src} className="w-full h-full object-cover" alt="" />
+            <img onDragStart={(e) => e.preventDefault()}
+            src={src} className="w-full h-full object-cover" alt="" />
             <button className="absolute top-2 right-2" 
                 onClick={(e) => 
                 {e.stopPropagation();
