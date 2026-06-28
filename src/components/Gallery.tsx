@@ -20,7 +20,11 @@ export default function Gallery(){
     return  (
     <DragDropProvider>
         <main className="list-none bg-yellow-100 px-5 py-5 flex justify-center">
-            <ul className="grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5">{listItems}</ul> 
+            <div className="flex-col">
+                <h1 className="font-sans text-xl font-bold text-center p-5">Image Gallery</h1>
+                <ul className="grid grid-cols-2 gap-5 md:grid-cols-4 lg:grid-cols-5">{listItems}</ul> 
+            </div>
+            
         </main>
     </DragDropProvider>
     )
