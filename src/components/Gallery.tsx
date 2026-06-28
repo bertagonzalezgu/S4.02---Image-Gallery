@@ -5,7 +5,7 @@ import { useState } from "react";
 export default function Gallery(){
     const [totalImages, setTotalImages] = useState(images)
     const listItems = totalImages.map((image, index) =>
-    <ImageItem key={image.id} id={image.id} src={image.src} isFeatured={index === 0}/>)
+    <ImageItem key={image.id} id={image.id} src={image.src} isFeatured={index === 0} onDelete={handleClick}/>)
 
     function handleClick(id: number){
     setTotalImages(totalImages.filter((image) => image.id !== id));
